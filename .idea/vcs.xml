@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/AndroidStudioProjects/CardioSuit-a" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AndroidStudioProjects/android-chess" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AndroidStudioProjects/androidtimer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/IdeaProjects/baekjoon-algorithm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/IdeaProjects/chess-server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/IdeaProjects/kotlin-study" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/IdeaProjects/spring-study" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/IdeaProjects/think-data-structure" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bionet" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bionet/backend/loginBackend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bionet/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bionet/study-kotlin" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/breadkey.github.io" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/study-kotlin" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test/spring-study" vcs="Git" />
+  </component>
+</project>
