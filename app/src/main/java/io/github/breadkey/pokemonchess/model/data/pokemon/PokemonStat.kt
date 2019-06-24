@@ -1,4 +1,4 @@
-package io.github.breadkey.alphapokemon.model.data.pokemon
+package io.github.breadkey.pokemonchess.model.data.pokemon
 
 enum class Stat {
     HP, ATTACK, DEFENSE, SPECIAL_ATTACK, SPECIAL_DEFENSE, SPEED

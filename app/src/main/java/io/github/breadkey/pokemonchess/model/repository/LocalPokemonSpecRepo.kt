@@ -1,8 +1,8 @@
-package io.github.breadkey.alphapokemon.model.repository
+package io.github.breadkey.pokemonchess.model.repository
 
-import io.github.breadkey.alphapokemon.model.data.pokemon.Electric
-import io.github.breadkey.alphapokemon.model.data.pokemon.PokemonSpec
-import io.github.breadkey.alphapokemon.model.data.pokemon.Stats
+import io.github.breadkey.pokemonchess.model.data.pokemon.Electric
+import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonSpec
+import io.github.breadkey.pokemonchess.model.data.pokemon.Stats
 
 object LocalPokemonSpecRepo: PokemonSpecRepository {
     private val pokemonSpecs: MutableList<PokemonSpec> = arrayListOf(

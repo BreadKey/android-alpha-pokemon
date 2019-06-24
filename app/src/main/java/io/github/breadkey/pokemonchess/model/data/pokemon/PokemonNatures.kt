@@ -1,4 +1,4 @@
-package io.github.breadkey.alphapokemon.model.data.pokemon
+package io.github.breadkey.pokemonchess.model.data.pokemon
 
 open class PokemonNature (
     val name: String,
