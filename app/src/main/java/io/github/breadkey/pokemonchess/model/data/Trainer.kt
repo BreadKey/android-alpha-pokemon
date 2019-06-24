@@ -1,6 +1,6 @@
-package io.github.breadkey.alphapokemon.model.data
+package io.github.breadkey.pokemonchess.model.data
 
-import io.github.breadkey.alphapokemon.model.data.pokemon.PokemonSpec
+import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonSpec
 
 data class Trainer(
     val id: Int,

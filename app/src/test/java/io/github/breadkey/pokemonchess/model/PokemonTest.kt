@@ -1,8 +1,7 @@
-package io.github.breadkey.alphapokemon.model
+package io.github.breadkey.pokemonchess.model
 
-import io.github.breadkey.alphapokemon.model.data.pokemon.*
-import io.github.breadkey.alphapokemon.model.repository.LocalPokemonSpecRepo
-import io.github.breadkey.alphapokemon.model.repository.PokemonSpecRepository
+import io.github.breadkey.pokemonchess.model.data.pokemon.*
+import io.github.breadkey.pokemonchess.model.repository.LocalPokemonSpecRepo
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*

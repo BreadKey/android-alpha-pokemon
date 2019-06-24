@@ -1,4 +1,4 @@
-package io.github.breadkey.alphapokemon
+package io.github.breadkey.pokemonchess
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

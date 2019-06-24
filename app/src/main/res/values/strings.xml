@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AlphaPokemon</string>
+    <string name="app_name">PokemonChess</string>
+    <string name="charmander_front_idle">Chramander Front Idle</string>
 </resources>

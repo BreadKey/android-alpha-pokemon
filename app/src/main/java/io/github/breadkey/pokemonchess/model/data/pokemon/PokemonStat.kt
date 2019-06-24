@@ -1,4 +1,4 @@
-package io.github.breadkey.alphapokemon.model.data.pokemon
+package io.github.breadkey.pokemonchess.model.data.pokemon
 
 enum class Stat {
     HP, ATTACK, DEFENSE, SPECIAL_ATTACK, SPECIAL_DEFENSE, SPEED
@@ -20,18 +20,12 @@ class Stats {
         stats[Stat.SPEED] = speed
     }
 
-    val hp: Int
-        get() = stats[Stat.HP]!!
-    val attack: Int
-        get() = stats[Stat.ATTACK]!!
-    val defense: Int
-        get() = stats[Stat.DEFENSE]!!
-    val specialAttack: Int
-        get() = stats[Stat.SPECIAL_ATTACK]!!
-    val specialDefense: Int
-        get() = stats[Stat.SPECIAL_DEFENSE]!!
-    val speed: Int
-        get() = stats[Stat.SPEED]!!
+    val hp: Int get() = stats[Stat.HP]!!
+    val attack: Int get() = stats[Stat.ATTACK]!!
+    val defense: Int get() = stats[Stat.DEFENSE]!!
+    val specialAttack: Int get() = stats[Stat.SPECIAL_ATTACK]!!
+    val specialDefense: Int get() = stats[Stat.SPECIAL_DEFENSE]!!
+    val speed: Int get() = stats[Stat.SPEED]!!
 
     val sum: Int
         get() = stats.values.reduce { acc, i -> acc + i }
