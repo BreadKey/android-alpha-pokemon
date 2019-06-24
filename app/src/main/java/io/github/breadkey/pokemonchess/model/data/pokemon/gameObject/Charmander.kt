@@ -1,8 +1,7 @@
 package io.github.breadkey.pokemonchess.model.data.pokemon.gameObject
 
-import io.github.breadkey.pokemonchess.R
 import io.github.breadkey.pokemonchess.gameengine2d.*
-import io.github.breadkey.pokemonchess.util.SpriteEditor
+import io.github.breadkey.pokemonchess.gameengine2d.scripts.CharmanderScript
 
 class Charmander : GameObject() {
     init {
@@ -14,5 +13,7 @@ class Charmander : GameObject() {
             addAnim(CharmanderAnims.frontIdle)
             play(CharmanderAnims.frontIdle.id)
         })
+
+        addComponent(CharmanderScript())
     }
 }

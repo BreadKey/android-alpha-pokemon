@@ -2,9 +2,11 @@ package io.github.breadkey.pokemonchess.gameengine2d
 
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Handler
 import android.view.View
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.*
 
 open class GameScene(context: Context): View(context) {
     val gameObjects = arrayListOf<GameObject>()
@@ -18,15 +20,36 @@ open class GameScene(context: Context): View(context) {
     private var isPlaying = false
     fun play() {
         isPlaying = true
+        Time.delta = 0L
         GlobalScope.launch {
             while (isPlaying) {
-                postInvalidate()
+                update()
             }
         }
     }
 
+
     fun puase() {
         isPlaying = false
+    }
+
+    private fun update() {
+        val startTime = System.currentTimeMillis()
+        gameObjects.forEach { gameObject ->
+            updateScript(gameObject)
+        }
+        postInvalidate()
+        Time.delta = System.currentTimeMillis() - startTime
+    }
+
+    private fun updateScript(gameObject: GameObject) {
+        gameObject.getScripts().forEach {
+            it.update()
+        }
+
+        gameObject.getChildren().forEach { child ->
+            updateScript(child)
+        }
     }
 
     private fun renderObject(canvas: Canvas, gameObject: GameObject) {

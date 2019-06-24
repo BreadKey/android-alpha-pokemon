@@ -2,12 +2,9 @@ package io.github.breadkey.pokemonchess.gameengine2d
 
 import android.graphics.Canvas
 import android.os.CountDownTimer
-import kotlinx.coroutines.*
-import java.util.*
-import kotlin.concurrent.thread
 
 open class GameObjectComponent {
-    lateinit var gameObject: GameObject
+    var gameObject: GameObject? = null
 }
 
 class SpriteRenderer(var sprite: Sprite): GameObjectComponent() {
@@ -38,7 +35,7 @@ class AnimationController: GameObjectComponent() {
                 }
 
                 override fun onTick(millisUntilFinished: Long) {
-                    gameObject.spriteRenderer?.sprite = with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
+                    gameObject?.spriteRenderer?.sprite = with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
                         when {
                             this < 0 -> anim.sprites.first()
                             this >= anim.sprites.size -> anim.sprites.last()
@@ -55,6 +52,6 @@ class AnimationController: GameObjectComponent() {
     }
 }
 
-class GameScript: GameObjectComponent() {
-
+abstract class GameScript: GameObjectComponent() {
+    abstract fun update()
 }

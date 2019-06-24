@@ -5,6 +5,7 @@ open class GameObject {
     var parent: GameObject? = null
     var spriteRenderer: SpriteRenderer? = null
         private set
+    private val scripts = arrayListOf<GameScript>()
     private val children = arrayListOf<GameObject>()
     private val components = arrayListOf<GameObjectComponent>()
 
@@ -25,15 +26,28 @@ open class GameObject {
 
     fun addComponent(component: GameObjectComponent) {
         if (!components.contains(component)) {
-            if (component is SpriteRenderer)
-                spriteRenderer = component
+            when (component) {
+                is SpriteRenderer -> spriteRenderer = component
+                is GameScript -> scripts.add(component)
+            }
             components.add(component)
             component.gameObject = this
         }
     }
 
     fun removeComponent(component: GameObjectComponent) {
-        components.remove(component)
+        if (components.contains(component)) {
+            when (component) {
+                is SpriteRenderer -> spriteRenderer = null
+                is GameScript -> scripts.remove(component)
+            }
+            component.gameObject = null
+            components.remove(component)
+        }
+    }
+
+    fun getScripts(): List<GameScript> {
+        return scripts
     }
 }
 
