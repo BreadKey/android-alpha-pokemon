@@ -10,11 +10,18 @@ import java.util.*
 
 open class GameScene(context: Context): View(context) {
     val gameObjects = arrayListOf<GameObject>()
+
     override fun onDraw(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(
+            width / 2f, height / 2f
+        )
+
         gameObjects.forEach {
             renderObject(canvas, it)
         }
         super.onDraw(canvas)
+        canvas.restore()
     }
 
     private var isPlaying = false
@@ -43,6 +50,8 @@ open class GameScene(context: Context): View(context) {
     }
 
     private fun updateScript(gameObject: GameObject) {
+        if (!gameObject.isEnabled) return
+
         gameObject.getScripts().forEach {
             it.update()
         }
@@ -53,8 +62,12 @@ open class GameScene(context: Context): View(context) {
     }
 
     private fun renderObject(canvas: Canvas, gameObject: GameObject) {
+        if (!gameObject.isEnabled) return
+
         canvas.save()
-        canvas.translate(gameObject.transform.position.x, gameObject.transform.position.y)
+        canvas.rotate(gameObject.transform.rotation.z)
+        canvas.translate(gameObject.transform.position.x, -gameObject.transform.position.y)
+        canvas.scale(gameObject.transform.scale.x, gameObject.transform.scale.y)
         gameObject.spriteRenderer?.render(canvas)
 
         gameObject.getChildren().forEach { child ->

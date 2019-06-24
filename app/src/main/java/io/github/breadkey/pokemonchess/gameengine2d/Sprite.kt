@@ -7,7 +7,7 @@ class Sprite {
         LEFT_TOP, CENTER
     }
 
-    var  pivot = Pivot.LEFT_TOP
+    var  pivot = Pivot.CENTER
     lateinit var bitmap: Bitmap
     var offset = Vector3(0f, 0f, 0f)
 }

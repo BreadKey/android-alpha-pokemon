@@ -8,5 +8,5 @@ open class PokemonSprites (
 )
 
 object CharmanderSprites: PokemonSprites(
-    frontIdle = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, Sprite.Pivot.LEFT_TOP, 3).subList(0, 107)
+    frontIdle = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, 3).subList(0, 107)
 )

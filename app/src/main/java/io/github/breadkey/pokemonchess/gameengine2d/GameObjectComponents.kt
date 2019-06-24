@@ -9,7 +9,13 @@ open class GameObjectComponent {
 
 class SpriteRenderer(var sprite: Sprite): GameObjectComponent() {
     fun render(canvas: Canvas) {
+        canvas.save()
+        when (sprite.pivot) {
+            Sprite.Pivot.CENTER ->
+                canvas.translate(-sprite.bitmap.width / 2f, -sprite.bitmap.height / 2f)
+        }
         canvas.drawBitmap(sprite.bitmap, 0f, 0f, null)
+        canvas.restore()
     }
 }
 

@@ -12,7 +12,7 @@ object SpriteEditor {
     var context = GlobalApplication.instance.context()
 
 
-    fun getSprites(resid: Int, width: Int, height: Int, pivot: Sprite.Pivot, pixcelSize: Int = 1): List<Sprite> {
+    fun getSprites(resid: Int, width: Int, height: Int, pixelSize: Int = 1, pivot: Sprite.Pivot? = null): List<Sprite> {
         val sprites = arrayListOf<Sprite>()
         val bitmapDrawable: BitmapDrawable = context.getDrawable(resid) as BitmapDrawable
         val bitmap = bitmapDrawable.bitmap
@@ -20,11 +20,11 @@ object SpriteEditor {
         for (y in 0..bitmap.height - height step height) {
             for (x in 0..bitmap.width - width step width) {
                 var resultBitmap = Bitmap.createBitmap(bitmap, x, y, width, height)
-                if (pixcelSize > 1)
-                    resultBitmap = Bitmap.createScaledBitmap(resultBitmap, width * pixcelSize, height * pixcelSize, false)
+                if (pixelSize > 1)
+                    resultBitmap = Bitmap.createScaledBitmap(resultBitmap, width * pixelSize, height * pixelSize, false)
                 val sprite = Sprite()
                 sprite.bitmap = resultBitmap
-                sprite.pivot = pivot
+                sprite.pivot = pivot ?: sprite.pivot
                 sprites.add(sprite)
             }
         }

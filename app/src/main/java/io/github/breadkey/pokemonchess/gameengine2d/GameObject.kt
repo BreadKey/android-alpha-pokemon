@@ -9,6 +9,21 @@ open class GameObject {
     private val children = arrayListOf<GameObject>()
     private val components = arrayListOf<GameObjectComponent>()
 
+    var isEnabled = true
+
+    @Suppress("Destroy", "Unused")
+    fun destroy() {
+        isEnabled = false
+        parent?.removeChild(this)
+        spriteRenderer = null
+        scripts.clear()
+        components.clear()
+
+        children.forEach {
+            destroy()
+        }
+    }
+
     fun addChild(child: GameObject) {
         if (!children.contains(child)) {
             children.add(child)
