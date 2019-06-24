@@ -38,14 +38,13 @@ class AnimationController: GameObjectComponent() {
                 }
 
                 override fun onTick(millisUntilFinished: Long) {
-                    val index = with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
+                    gameObject.spriteRenderer?.sprite = with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
                         when {
-                            this < 0 -> 0
-                            this >= anim.sprites.size -> anim.sprites.lastIndex
-                            else -> this
+                            this < 0 -> anim.sprites.first()
+                            this >= anim.sprites.size -> anim.sprites.last()
+                            else -> anim.sprites[this]
                         }
                     }
-                    gameObject.spriteRenderer?.sprite = anim.sprites[index]
                 }
             }.start()
         }
