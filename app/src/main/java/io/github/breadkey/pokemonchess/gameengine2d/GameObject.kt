@@ -1,7 +1,7 @@
 package io.github.breadkey.pokemonchess.gameengine2d
 
 open class GameObject {
-    val transform = Transform()
+    var transform = Transform()
     var parent: GameObject? = null
     var spriteRenderer: SpriteRenderer? = null
         private set
@@ -9,10 +9,32 @@ open class GameObject {
     private val children = arrayListOf<GameObject>()
     private val components = arrayListOf<GameObjectComponent>()
 
+    var globalTransform: Transform
+        get() {
+            val position = Vector3(transform.position)
+            if (parent != null) {
+                val scaledPosition = position * parent!!.globalTransform.scale
+                val radian = Math.toRadians(parent!!.globalTransform.rotation.z.toDouble())
+                position.x = parent!!.globalTransform.position.x + (scaledPosition.x * Math.cos(radian) + scaledPosition.y * Math.sin(radian)).toFloat()
+                position.y = parent!!.globalTransform.position.y + (scaledPosition.y * Math.cos(radian) - scaledPosition.x * Math.sin(radian)).toFloat()
+                position.z = parent!!.globalTransform.position.z + position.z
+            }
+
+            val scale = transform.scale * if (parent != null) parent!!.globalTransform.scale else Vector3(1f, 1f, 1f)
+            val rotation = transform.rotation + if (parent != null) parent!!.globalTransform.rotation else Vector3()
+
+            return Transform().apply {
+                this.position = position
+                this.scale = scale
+                this.rotation = rotation
+            }
+        }
+        set(value) {}
+
     var isEnabled = true
 
     @Suppress("Destroy", "Unused")
-    fun destroy() {
+    open fun destroy() {
         isEnabled = false
         parent?.removeChild(this)
         spriteRenderer = null

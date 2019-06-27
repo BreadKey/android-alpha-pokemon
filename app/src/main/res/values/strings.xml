@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PokemonChess</string>
     <string name="charmander_front_idle">Chramander Front Idle</string>
+    <string name="pokemonChessScene">Pokemon Chess Scene</string>
 </resources>
