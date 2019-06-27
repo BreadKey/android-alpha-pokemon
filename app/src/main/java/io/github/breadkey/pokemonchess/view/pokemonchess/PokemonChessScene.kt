@@ -1,13 +1,17 @@
 package io.github.breadkey.pokemonchess.view.pokemonchess
 
 import android.content.Context
-import android.os.Handler
 import io.github.breadkey.pokemonchess.gameengine2d.GameScene
-import io.github.breadkey.pokemonchess.model.data.pokemon.gameObject.Charmander
+import io.github.breadkey.pokemonchess.gameengine2d.Vector3
+import io.github.breadkey.pokemonchess.model.gameobject.pokemon.Charmander
 
-class PokemonChessScene(context: Context): GameScene(context) {
+class PokemonChessScene(sceneName: String, context: Context): GameScene(sceneName, context) {
     init {
-        gameObjects.add(Charmander())
-        play()
+        camera.position = Vector3(100f, 100f, 0f)
+        gameObjects.add(Charmander().apply {
+            addChild(Charmander().apply {
+                transform.position = Vector3(150f, 150f, 0f)
+            })
+        })
     }
 }
