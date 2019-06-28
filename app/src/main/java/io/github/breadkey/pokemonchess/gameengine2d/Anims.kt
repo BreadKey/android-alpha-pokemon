@@ -12,3 +12,10 @@ object CharmanderAnims: PokemonAnims (
         playTime = 107 * 33
     }
 )
+
+object CharizardAnims: PokemonAnims (
+    frontIdle = Anim(R.string.charizard_front_idle).apply {
+        sprites = CharizardSprites.frontIdle
+        playTime = 143 * 33
+    }
+)

@@ -11,10 +11,21 @@ object GameSceneManager {
     fun loadScene(name: String, context: Context) {
         if (!gameScenes.keys.contains(name)) {
             when (name) {
-                context.getString(R.string.pokemonChessScene) -> gameScenes[name] = PokemonChessScene(name, context)
+                context.getString(R.string.pokemonChessScene) -> {
+                    currentGameScene?.pause()
+                    currentGameScene = PokemonChessScene(name, context)
+                    with (currentGameScene!!) {
+                        initializeScene()
+                        play()
+                    }
+                    gameScenes[name] = currentGameScene!!
+                }
+            }
+        } else {
+            currentGameScene?.pause()
+            currentGameScene = gameScenes[name]!!.apply {
+                play()
             }
         }
-        currentGameScene?.pause()
-        currentGameScene = gameScenes[name]!!.apply { play() }
     }
 }

@@ -22,7 +22,7 @@ class SpriteEditorTest {
     @Test
     fun charmanderTest() {
         SpriteEditor.context = InstrumentationRegistry.getTargetContext()
-        val sprites = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, Sprite.Pivot.LEFT_TOP).subList(0, 107)
+        val sprites = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, Sprite.Pivot.RIGHT_BOTTOM).subList(0, 107)
 
         assertEquals(5 * 22 - 3, sprites.size)
     }
