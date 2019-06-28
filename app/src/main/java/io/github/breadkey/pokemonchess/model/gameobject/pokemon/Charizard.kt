@@ -4,16 +4,12 @@ import io.github.breadkey.pokemonchess.R
 import io.github.breadkey.pokemonchess.gameengine2d.*
 import io.github.breadkey.pokemonchess.gameengine2d.scripts.PokemonScript
 
-class Charmander: PokemonInBattle() {
+class Charizard: PokemonInBattle() {
     init {
-        addComponent(SpriteRenderer(
-            CharmanderSprites.frontIdle.first()
-        ))
-
-        addComponent(AnimationController(R.string.charmander_front_idle).apply {
-            addAnim(CharmanderAnims.frontIdle)
-        })
-
+        addComponent(SpriteRenderer(CharizardSprites.frontIdle.first()))
         addComponent(PokemonScript())
+        addComponent(AnimationController(R.string.charizard_front_idle).apply {
+            addAnim(CharizardAnims.frontIdle)
+        })
     }
 }

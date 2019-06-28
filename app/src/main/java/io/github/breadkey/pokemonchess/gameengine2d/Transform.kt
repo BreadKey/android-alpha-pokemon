@@ -19,6 +19,10 @@ class Vector3(
         return Vector3(x + increment.x, y + increment.y, z + increment.z)
     }
 
+    operator fun minus(increment: Vector3): Vector3 {
+        return Vector3(x - increment.x, y - increment.y, z - increment.z)
+    }
+
     operator fun times(increment: Vector3): Vector3 {
         return Vector3(x * increment.x, y * increment.y, z * increment.z)
     }
@@ -42,5 +46,9 @@ class Rect(
         val halfHeight = height / 2f
 
         return centerX - halfWidth <= x && x <= centerX + halfWidth && centerY - halfHeight <= y && y <= centerY + halfHeight
+    }
+
+    fun isInRect(vector3: Vector3): Boolean {
+        return isInRect(vector3.x, vector3.y)
     }
 }

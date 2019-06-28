@@ -40,6 +40,7 @@ open class GameObject {
         spriteRenderer = null
         scripts.clear()
         components.clear()
+        GameSceneManager.currentGameScene?.removeGameObject(this)
 
         children.forEach {
             destroy()
@@ -48,13 +49,15 @@ open class GameObject {
 
     fun addChild(child: GameObject) {
         if (!children.contains(child)) {
+            child.parent?.removeChild(child)
+            GameSceneManager.currentGameScene?.removeGameObject(child)
             children.add(child)
             child.parent = this
         }
     }
 
     fun removeChild(child: GameObject) {
-        val index = child
+        children.remove(child)
     }
 
     fun getChildren(): List<GameObject> {
@@ -85,6 +88,16 @@ open class GameObject {
 
     fun getScripts(): List<GameScript> {
         return scripts
+    }
+
+    fun getComponent(componentClass: Class<out GameObjectComponent>): GameObjectComponent? {
+        components.forEach {
+            if (it::class.java.name == componentClass.name) {
+                return it
+            }
+        }
+
+        return null
     }
 }
 

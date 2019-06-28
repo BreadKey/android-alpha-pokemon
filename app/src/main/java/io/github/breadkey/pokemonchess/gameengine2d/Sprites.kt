@@ -8,5 +8,13 @@ open class PokemonSprites (
 )
 
 object CharmanderSprites: PokemonSprites(
-    frontIdle = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, 3).subList(0, 107)
+    frontIdle = SpriteEditor.getSprites(R.drawable.charmander_front, 42, 42, 2, Sprite.Pivot.BOTTOM).subList(0, 107)
 )
+
+object CharizardSprites: PokemonSprites(
+    frontIdle = SpriteEditor.getSprites(R.drawable.charizard_front, 89, 91, 2, Sprite.Pivot.BOTTOM).subList(0, 143)
+)
+
+object TilesetSprites {
+    val island = SpriteEditor.getSprites(R.drawable.island, 32, 32, 4)
+}

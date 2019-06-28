@@ -8,12 +8,12 @@ import android.view.View
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-open class GameScene(val sceneName: String, context: Context): View(context) {
+abstract class GameScene(val sceneName: String, context: Context): View(context) {
     init {
         isClickable = true
     }
 
-    val gameObjects = arrayListOf<GameObject>()
+    private val gameObjects = arrayListOf<GameObject>()
     var camera = Transform()
 
     @SuppressLint("DrawAllocation")
@@ -25,7 +25,7 @@ open class GameScene(val sceneName: String, context: Context): View(context) {
             height / 2f - camera.position.y
         )
         canvas.rotate(camera.rotation.z)
-        canvas.scale(camera.scale.x, camera.scale.z)
+        canvas.scale(camera.scale.x, camera.scale.y)
 
         gameObjects.forEach {
             renderObject(canvas, it)
@@ -37,8 +37,8 @@ open class GameScene(val sceneName: String, context: Context): View(context) {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
-            val x = event.x - width / 2 - camera.position.x
-            val y = (height / 2 - event.y) - camera.position.y
+            val x = (event.x - width / 2) / camera.scale.x - camera.position.x
+            val y = (height / 2 - event.y) / camera.scale.y - camera.position.y
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN ->
@@ -105,4 +105,20 @@ open class GameScene(val sceneName: String, context: Context): View(context) {
         }
         canvas.restore()
     }
+
+    fun addGameObject(gameObject: GameObject) {
+        if (!gameObjects.contains(gameObject)) {
+            gameObjects.add(gameObject.apply {
+                gameObject.getScripts().forEach {
+                    it.awake()
+                }
+            })
+        }
+    }
+
+    fun removeGameObject(gameObject: GameObject) {
+        gameObjects.remove(gameObject)
+    }
+
+    abstract fun initializeScene()
 }

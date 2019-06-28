@@ -14,8 +14,9 @@ object TouchManager {
         if (touchedObject != null) return
 
         touchableObjects.reversed().forEach {
-            if (it.isTouchable && it.isEnabled && it.isTouched(x, y)) {
+            if (it.isTouchable && it.isEnabled && it.touchCollider.isHit(x, y)) {
                 touchedObject = it
+                it.touched()
                 return
             }
         }
