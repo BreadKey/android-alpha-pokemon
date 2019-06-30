@@ -17,14 +17,19 @@ class PokemonChessActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pokemonChessViewModel = ViewModelFactory.getViewModel(application, PokemonChessViewModel::class.java) as PokemonChessViewModel
-        val dataBinding = DataBindingUtil.setContentView<PokemonChessActivityBinding>(this, R.layout.pokemon_chess_activity)
-        dataBinding.viewModel = pokemonChessViewModel
-        dataBinding.pokemonChessScene.addView(pokemonChessViewModel.pokemonChessScene)
-        dataBinding.pokemonShopPanel.setFadeOnClickListener {
-            dataBinding.pokemonShopPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        if(savedInstanceState == null) {
+            pokemonChessViewModel =
+                ViewModelFactory.getViewModel(application, PokemonChessViewModel::class.java) as PokemonChessViewModel
+            val dataBinding =
+                DataBindingUtil.setContentView<PokemonChessActivityBinding>(this, R.layout.pokemon_chess_activity)
+            dataBinding.viewModel = pokemonChessViewModel
+            dataBinding.pokemonChessScene.addView(pokemonChessViewModel.pokemonChessScene)
+            dataBinding.pokemonShopPanel.setFadeOnClickListener {
+                dataBinding.pokemonShopPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            }
+            dataBinding.pokemonsForSale.layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            dataBinding.pokemonsForSale.adapter = PokemonForSaleAdapter(pokemonChessViewModel)
         }
-        dataBinding.pokemonsForSale.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-        dataBinding.pokemonsForSale.adapter = PokemonForSaleAdapter(pokemonChessViewModel)
     }
 }

@@ -7,14 +7,16 @@ import io.github.breadkey.pokemonchess.model.data.Player
 import io.github.breadkey.pokemonchess.model.data.Trainer
 import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonInChess
 import io.github.breadkey.pokemonchess.model.gameobject.BattleField
+import io.github.breadkey.pokemonchess.model.gameobject.Tile
 
 open class PokemonInChessGameObject(val pokemonInChess: PokemonInChess): TouchableObject(
     touchCollider = BoxCollider(
-        offset = Vector3(0f, 0.5f),
-        size = Vector3(96f, 96f)
+        offset = Vector3(0f, 0f),
+        size = Vector3(Tile.Size, Tile.Size)
     )
 ) {
     private lateinit var previousPosition: Vector3
+    private lateinit var previousScale: Vector3
     var owner: Trainer? = null
         set(value) {
             pokemonInChess.trainer = value
@@ -25,6 +27,8 @@ open class PokemonInChessGameObject(val pokemonInChess: PokemonInChess): Touchab
         if (owner != Player) return
 
         previousPosition = Vector3(transform.position)
+        previousScale = Vector3(transform.scale)
+        transform.scale = previousScale * 1.5f
     }
 
     override fun moved(x: Float, y: Float) {
@@ -42,6 +46,7 @@ open class PokemonInChessGameObject(val pokemonInChess: PokemonInChess): Touchab
     override fun released(x: Float, y: Float) {
         if (owner != Player) return
 
+        transform.scale = previousScale
         with (parent as? BattleField) {
             if (this?.place(this@PokemonInChessGameObject) == false) {
                 if (this?.placeToWaitingTile(this@PokemonInChessGameObject) == false) {

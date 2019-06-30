@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
+import io.github.breadkey.pokemonchess.model.gameobject.Tile
 import kotlinx.coroutines.*
 
 abstract class GameScene(val sceneName: String, context: Context): View(context) {
@@ -15,17 +16,22 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
     private val parentGameObjects = arrayListOf<GameObject>()
     var camera = Transform()
 
-    val updateContext = newSingleThreadContext("UpdateContext")
+    val gameUpdateContext = newSingleThreadContext("GameUpdateContext")
+
+    var ratio: Float? = null
+
+
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-
+        if (ratio == null) ratio = (width / 10) / Tile.Size
         canvas.save()
         canvas.translate(
             width / 2f + camera.position.x,
             height / 2f - camera.position.y
         )
         canvas.rotate(camera.rotation.z)
+        canvas.scale(ratio!!, ratio!!)
         canvas.scale(camera.scale.x, camera.scale.y)
 
         for (gameObject in parentGameObjects) {
@@ -38,8 +44,8 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
-            val x = (event.x - width / 2) / camera.scale.x - camera.position.x
-            val y = (height / 2 - event.y) / camera.scale.y - camera.position.y
+            val x = (event.x - width / 2) / ratio!! / camera.scale.x - camera.position.x
+            val y = (height / 2 - event.y) / ratio!! / camera.scale.y - camera.position.y
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN ->
@@ -62,7 +68,7 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         Time.delta = 0L
         GlobalScope.launch {
             while (isPlaying) {
-                withContext(updateContext) {
+                withContext(gameUpdateContext) {
                     update()
                 }
 

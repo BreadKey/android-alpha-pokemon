@@ -21,16 +21,12 @@ class PokemonChessScene(sceneName: String, context: Context): GameScene(sceneNam
 
     override fun initializeScene() {
         pokemonChessGame = PokemonChessGame()
-
-        camera.scale = Vector3(0.6f, 0.6f)
-
         pokemonChessGame.startChessGame(listOf(Player))
         val battleField = BattleField(Player)
         battleFields[Player.id] = battleField
 
         addParentGameObject(battleField)
         camera.position = Vector3(battleField.transform.position)
-        camera.position.y += 50f
     }
 
     fun tryBuy(pokemonSpec: PokemonSpec) {

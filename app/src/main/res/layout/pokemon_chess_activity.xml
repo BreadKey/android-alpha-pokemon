@@ -13,7 +13,8 @@
         sothree:umanoOverlay="true"
         sothree:umanoFadeColor="@android:color/transparent"
         sothree:umanoPanelHeight="20dp"
-        sothree:umanoShadowHeight="4dp">
+        sothree:umanoShadowHeight="4dp"
+        android:background="@drawable/water">
 
         <FrameLayout
             android:id="@+id/pokemon_chess_scene"
@@ -25,17 +26,18 @@
         <android.support.constraint.ConstraintLayout
             android:clickable="true"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:gravity="center|bottom"
             android:background="#80808080">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/pokemons_for_sale"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                sothree:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 sothree:layout_constraintEnd_toEndOf="parent"
                 sothree:layout_constraintStart_toStartOf="parent"
                 sothree:layout_constraintTop_toTopOf="parent"
+                android:background="@android:color/darker_gray"
                 sothree:pokemon_specs="@{viewModel.pokemonChessScene.pokemonChessGame.pokemonShop.pokemonsForSale}"/>
         </android.support.constraint.ConstraintLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

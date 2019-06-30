@@ -36,6 +36,14 @@ class Vector3(
     override fun toString(): String {
         return "x: $x, y: $y, z: $z"
     }
+
+    operator fun times(float: Float): Vector3 {
+        return Vector3(x * float, y * float, z * float)
+    }
+
+    operator fun div(int: Int): Vector3 {
+        return Vector3(x / int, y / int, z / int)
+    }
 }
 
 class Rect(

@@ -12,6 +12,10 @@ abstract class PokemonShop {
     abstract fun refreshPokemons()
     abstract fun buy(index: Int)
     abstract fun sell(pokemonSpec: PokemonSpec)
+
+    companion object {
+        const val SALES_POKEMON_COUNT = 5
+    }
 }
 
 class LocalPokemonShop: PokemonShop() {
