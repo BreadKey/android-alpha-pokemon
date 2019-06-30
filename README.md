@@ -8,4 +8,4 @@
 ## 2019-06-30
 ### 포켓몬 구매 구현
 안드로이드 UI를 사용하여 게임을 조작하려다 보니 쓰레드간의 블라킹 문제가 발생하여 이를 해결
-![engine_20190630](https://user-images.githubusercontent.com/37973204/60394125-32041100-9b5a-11e9-950f-3a80545210f0.gif
+![engine_20190630](https://user-images.githubusercontent.com/37973204/60394125-32041100-9b5a-11e9-950f-3a80545210f0.gif)
