@@ -37,9 +37,7 @@ class PokemonForSaleAdapter(private val viewModel: PokemonChessViewModel): Recyc
             listener = object : PokemonForSaleListener {
                 override fun onClick(pokemonSpec: PokemonSpec) {
                     GlobalScope.launch {
-                        runBlocking {
-                            viewModel.tryBuy(pokemonSpec)
-                        }
+                        viewModel.tryBuy(pokemonSpec)
                     }
                 }
             }

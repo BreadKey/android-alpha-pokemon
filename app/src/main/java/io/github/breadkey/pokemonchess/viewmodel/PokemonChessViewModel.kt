@@ -9,6 +9,7 @@ import io.github.breadkey.pokemonchess.gameengine2d.GameScene
 import io.github.breadkey.pokemonchess.gameengine2d.GameSceneManager
 import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonSpec
 import io.github.breadkey.pokemonchess.view.pokemonchess.PokemonChessScene
+import kotlinx.coroutines.runBlocking
 
 class PokemonChessViewModel(app: Application): AndroidViewModel(app) {
     @SuppressLint("StaticFieldLeak")
@@ -21,7 +22,7 @@ class PokemonChessViewModel(app: Application): AndroidViewModel(app) {
         pokemonChessScene = (GameSceneManager.currentGameScene as PokemonChessScene?)!!
     }
 
-    fun tryBuy(pokemonSpec: PokemonSpec) {
+    fun tryBuy(pokemonSpec: PokemonSpec) = runBlocking {
         pokemonChessScene.tryBuy(pokemonSpec)
     }
 }
