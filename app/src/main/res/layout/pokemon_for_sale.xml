@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="pokemonSpec"
+            type="io.github.breadkey.pokemonchess.model.data.pokemon.PokemonSpec" />
+        <variable
+            name="listener"
+            type="io.github.breadkey.pokemonchess.view.pokemonchess.PokemonForSaleListener" />
+    </data>
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:onClick="@{()->listener.onClick(pokemonSpec)}"
+        android:text="@{pokemonSpec.name}"/>
+</layout>

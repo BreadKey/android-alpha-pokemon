@@ -3,17 +3,23 @@ package io.github.breadkey.pokemonchess.gameengine2d
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.MotionEvent
 import android.view.View
+import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 abstract class GameScene(val sceneName: String, context: Context): View(context) {
     init {
         isClickable = true
     }
 
-    private val gameObjects = arrayListOf<GameObject>()
+    private val parentGameObjects = arrayListOf<GameObject>()
     var camera = Transform()
 
     @SuppressLint("DrawAllocation")
@@ -27,8 +33,8 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         canvas.rotate(camera.rotation.z)
         canvas.scale(camera.scale.x, camera.scale.y)
 
-        gameObjects.forEach {
-            renderObject(canvas, it)
+        for (gameObject in parentGameObjects) {
+            renderObject(canvas, gameObject)
         }
         super.onDraw(canvas)
         canvas.restore()
@@ -54,13 +60,19 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         return super.onTouchEvent(event)
     }
 
-    private var isPlaying = false
+    var isPlaying = false
+
     fun play() {
         isPlaying = true
         Time.delta = 0L
-        GlobalScope.launch {
+
+        GlobalScope.launch(Dispatchers.Default) {
             while (isPlaying) {
                 update()
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    invalidate()
+                }
             }
         }
     }
@@ -70,16 +82,15 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         isPlaying = false
     }
 
-    private fun update() {
+    private fun update() = runBlocking {
         val startTime = System.currentTimeMillis()
-        gameObjects.forEach { gameObject ->
+        parentGameObjects.forEach { gameObject ->
             updateScript(gameObject)
         }
-        postInvalidate()
         Time.delta = System.currentTimeMillis() - startTime
     }
 
-    private fun updateScript(gameObject: GameObject) {
+    private suspend fun updateScript(gameObject: GameObject) {
         if (!gameObject.isEnabled) return
 
         gameObject.getScripts().forEach {
@@ -106,19 +117,22 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         canvas.restore()
     }
 
-    fun addGameObject(gameObject: GameObject) {
-        if (!gameObjects.contains(gameObject)) {
-            gameObjects.add(gameObject.apply {
-                gameObject.getScripts().forEach {
-                    it.awake()
-                }
-            })
+    fun addParentGameObject(gameObject: GameObject) {
+        if (!parentGameObjects.contains(gameObject)) {
+            parentGameObjects.add(gameObject)
+            gameObject.getScripts().forEach {
+                it.awake()
+            }
         }
     }
 
-    fun removeGameObject(gameObject: GameObject) {
-        gameObjects.remove(gameObject)
+    fun removeParentGameObject(gameObject: GameObject) {
+        parentGameObjects.remove(gameObject)
     }
 
     abstract fun initializeScene()
+
+    companion object {
+        val IS_PLAYING = 0
+    }
 }

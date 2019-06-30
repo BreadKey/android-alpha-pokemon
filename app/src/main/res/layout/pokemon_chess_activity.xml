@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="viewModel" type="io.github.breadkey.pokemonchess.viewmodel.PokemonChessViewModel"/>
+    </data>
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/pokemon_shop_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        sothree:umanoOverlay="true"
+        sothree:umanoFadeColor="@android:color/transparent"
+        sothree:umanoPanelHeight="20dp"
+        sothree:umanoShadowHeight="4dp">
+
+        <FrameLayout
+            android:id="@+id/pokemon_chess_scene"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|bottom">
+        </FrameLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="center|bottom"
+            android:background="#80808080">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/pokemons_for_sale"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                sothree:layout_constraintBottom_toBottomOf="parent"
+                sothree:layout_constraintEnd_toEndOf="parent"
+                sothree:layout_constraintStart_toStartOf="parent"
+                sothree:layout_constraintTop_toTopOf="parent"
+                sothree:pokemon_specs="@{viewModel.pokemonChessScene.pokemonChessGame.pokemonShop.pokemonsForSale}"/>
+        </android.support.constraint.ConstraintLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</layout>

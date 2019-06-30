@@ -3,6 +3,15 @@ package io.github.breadkey.pokemonchess.gameengine2d
 open class GameObject {
     var transform = Transform()
     var parent: GameObject? = null
+        set(value) {
+            GameSceneManager.currentGameScene?.removeParentGameObject(this)
+            field?.removeChild(this)
+            field = value
+            if (value?.children?.contains(this) == false) {
+                value.children.add(this)
+            }
+        }
+
     var spriteRenderer: SpriteRenderer? = null
         private set
     private val scripts = arrayListOf<GameScript>()
@@ -40,7 +49,7 @@ open class GameObject {
         spriteRenderer = null
         scripts.clear()
         components.clear()
-        GameSceneManager.currentGameScene?.removeGameObject(this)
+        GameSceneManager.currentGameScene?.removeParentGameObject(this)
 
         children.forEach {
             destroy()
@@ -49,10 +58,10 @@ open class GameObject {
 
     fun addChild(child: GameObject) {
         if (!children.contains(child)) {
-            child.parent?.removeChild(child)
-            GameSceneManager.currentGameScene?.removeGameObject(child)
-            children.add(child)
             child.parent = this
+            child.getScripts().forEach {
+                it.awake() // 단순 parent 설정과의 차이
+            }
         }
     }
 

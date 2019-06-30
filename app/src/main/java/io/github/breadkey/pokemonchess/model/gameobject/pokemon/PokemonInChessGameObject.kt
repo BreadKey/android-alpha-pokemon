@@ -3,21 +3,33 @@ package io.github.breadkey.pokemonchess.model.gameobject.pokemon
 import io.github.breadkey.pokemonchess.gameengine2d.BoxCollider
 import io.github.breadkey.pokemonchess.gameengine2d.TouchableObject
 import io.github.breadkey.pokemonchess.gameengine2d.Vector3
+import io.github.breadkey.pokemonchess.model.data.Player
+import io.github.breadkey.pokemonchess.model.data.Trainer
+import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonInChess
 import io.github.breadkey.pokemonchess.model.gameobject.BattleField
 
-open class PokemonInBattle: TouchableObject(
+open class PokemonInChessGameObject(val pokemonInChess: PokemonInChess): TouchableObject(
     touchCollider = BoxCollider(
         offset = Vector3(0f, 0.5f),
         size = Vector3(96f, 96f)
     )
 ) {
     private lateinit var previousPosition: Vector3
+    var owner: Trainer? = null
+        set(value) {
+            pokemonInChess.trainer = value
+            field = value
+        }
 
     override fun touched() {
+        if (owner != Player) return
+
         previousPosition = Vector3(transform.position)
     }
 
     override fun moved(x: Float, y: Float) {
+        if (owner != Player) return
+
         val globalTransform = globalTransform
         val realOffset = touchCollider.offset * touchCollider.size * globalTransform.scale
 
@@ -28,9 +40,13 @@ open class PokemonInBattle: TouchableObject(
     }
 
     override fun released(x: Float, y: Float) {
+        if (owner != Player) return
+
         with (parent as? BattleField) {
-            if (this?.place(this@PokemonInBattle) == false) {
-                this@PokemonInBattle.transform.position = previousPosition
+            if (this?.place(this@PokemonInChessGameObject) == false) {
+                if (this?.placeToWaitingTile(this@PokemonInChessGameObject) == false) {
+                    this@PokemonInChessGameObject.transform.position = previousPosition
+                }
             }
         }
     }

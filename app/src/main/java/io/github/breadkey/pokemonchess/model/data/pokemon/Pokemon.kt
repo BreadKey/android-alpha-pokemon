@@ -3,12 +3,28 @@ package io.github.breadkey.pokemonchess.model.data.pokemon
 import io.github.breadkey.pokemonchess.model.data.Trainer
 
 data class PokemonSpec (
+    var evolvedFrom: PokemonSpec? = null,
+    val rank: Int = 1,
+    val cost: Int = 1,
     val id: Int,
     val indexNumber: Int,
     val name: String,
     val types: List<PokemonType>,
-    val baseStats: Stats
+    val baseStats: Stats,
+    var evolveTo: PokemonSpec? = null
 )
+
+class PokemonInChess (
+    val pokemonSpec: PokemonSpec,
+    var trainer: Trainer? = null
+) {
+    fun getCost(): Int {
+        return if (pokemonSpec.evolvedFrom == null) pokemonSpec.cost
+        else {
+            3 * pokemonSpec.evolvedFrom!!.cost
+        }
+    }
+}
 
 class Pokemon (
     val id: Int,

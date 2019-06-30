@@ -2,7 +2,10 @@ package io.github.breadkey.pokemonchess.gameengine2d
 
 import android.graphics.Canvas
 import android.os.CountDownTimer
-import java.lang.reflect.Constructor
+import android.os.Handler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 open class GameObjectComponent {
     var gameObject: GameObject? = null
@@ -27,27 +30,30 @@ class AnimationController(val defaultAnimId: Int? = null): GameObjectComponent()
     }
 
     fun play(id: Int?) {
-        val anim = anims[id]
-        if (anim != null) {
-            stop()
-            delta = anim.playTime / anim.sprites.size
-            animationTimer = object : CountDownTimer(anim.playTime, delta) {
-                override fun onFinish() {
-                    if (anim.isLooping) {
-                        start()
-                    }
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-                    gameObject?.spriteRenderer?.sprite = with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
-                        when {
-                            this < 0 -> anim.sprites.first()
-                            this >= anim.sprites.size -> anim.sprites.last()
-                            else -> anim.sprites[this]
+        GlobalScope.launch(Dispatchers.Main) {
+            val anim = anims[id]
+            if (anim != null) {
+                stop()
+                delta = anim.playTime / anim.sprites.size
+                animationTimer = object : CountDownTimer(anim.playTime, delta) {
+                    override fun onFinish() {
+                        if (anim.isLooping) {
+                            start()
                         }
                     }
-                }
-            }.start()
+
+                    override fun onTick(millisUntilFinished: Long) {
+                        gameObject?.spriteRenderer?.sprite =
+                            with((anim.sprites.size - millisUntilFinished / delta).toInt()) {
+                                when {
+                                    this < 0 -> anim.sprites.first()
+                                    this >= anim.sprites.size -> anim.sprites.last()
+                                    else -> anim.sprites[this]
+                                }
+                            }
+                    }
+                }.start()
+            }
         }
     }
 
@@ -61,7 +67,7 @@ abstract class GameScript: GameObjectComponent() {
     abstract fun awake()
 
     fun instantiate(gameObject: GameObject, transform: Transform = Transform(), parent: GameObject? = null) {
-        GameSceneManager.currentGameScene?.addGameObject(gameObject)
+        GameSceneManager.currentGameScene?.addParentGameObject(gameObject)
         gameObject.transform = transform
         parent?.addChild(gameObject)
     }
