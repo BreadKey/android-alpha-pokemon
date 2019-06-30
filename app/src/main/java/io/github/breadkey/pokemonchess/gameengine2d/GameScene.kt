@@ -5,30 +5,37 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import io.github.breadkey.pokemonchess.model.gameobject.Tile
+import kotlinx.coroutines.*
 
 abstract class GameScene(val sceneName: String, context: Context): View(context) {
     init {
         isClickable = true
     }
 
-    private val gameObjects = arrayListOf<GameObject>()
+    private val parentGameObjects = arrayListOf<GameObject>()
     var camera = Transform()
+
+    val gameUpdateContext = newSingleThreadContext("GameUpdateContext")
+
+    var ratio: Float? = null
+
+
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-
+        if (ratio == null) ratio = (width / 10) / Tile.Size
         canvas.save()
         canvas.translate(
             width / 2f + camera.position.x,
             height / 2f - camera.position.y
         )
         canvas.rotate(camera.rotation.z)
+        canvas.scale(ratio!!, ratio!!)
         canvas.scale(camera.scale.x, camera.scale.y)
 
-        gameObjects.forEach {
-            renderObject(canvas, it)
+        for (gameObject in parentGameObjects) {
+            renderObject(canvas, gameObject)
         }
         super.onDraw(canvas)
         canvas.restore()
@@ -37,8 +44,8 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
-            val x = (event.x - width / 2) / camera.scale.x - camera.position.x
-            val y = (height / 2 - event.y) / camera.scale.y - camera.position.y
+            val x = (event.x - width / 2) / ratio!! / camera.scale.x - camera.position.x
+            val y = (height / 2 - event.y) / ratio!! / camera.scale.y - camera.position.y
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN ->
@@ -54,13 +61,20 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         return super.onTouchEvent(event)
     }
 
-    private var isPlaying = false
-    fun play() {
+    var isPlaying = false
+
+    fun play() = runBlocking {
         isPlaying = true
         Time.delta = 0L
         GlobalScope.launch {
             while (isPlaying) {
-                update()
+                withContext(gameUpdateContext) {
+                    update()
+                }
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    invalidate()
+                }
             }
         }
     }
@@ -70,16 +84,15 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         isPlaying = false
     }
 
-    private fun update() {
+    private suspend fun update() {
         val startTime = System.currentTimeMillis()
-        gameObjects.forEach { gameObject ->
+        parentGameObjects.forEach { gameObject ->
             updateScript(gameObject)
         }
-        postInvalidate()
         Time.delta = System.currentTimeMillis() - startTime
     }
 
-    private fun updateScript(gameObject: GameObject) {
+    private suspend fun updateScript(gameObject: GameObject) {
         if (!gameObject.isEnabled) return
 
         gameObject.getScripts().forEach {
@@ -106,19 +119,22 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         canvas.restore()
     }
 
-    fun addGameObject(gameObject: GameObject) {
-        if (!gameObjects.contains(gameObject)) {
-            gameObjects.add(gameObject.apply {
-                gameObject.getScripts().forEach {
-                    it.awake()
-                }
-            })
+    fun addParentGameObject(gameObject: GameObject) {
+        if (!parentGameObjects.contains(gameObject)) {
+            parentGameObjects.add(gameObject)
+            gameObject.getScripts().forEach {
+                it.awake()
+            }
         }
     }
 
-    fun removeGameObject(gameObject: GameObject) {
-        gameObjects.remove(gameObject)
+    fun removeParentGameObject(gameObject: GameObject) {
+        parentGameObjects.remove(gameObject)
     }
 
     abstract fun initializeScene()
+
+    companion object {
+        val IS_PLAYING = 0
+    }
 }

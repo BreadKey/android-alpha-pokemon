@@ -2,6 +2,7 @@ package io.github.breadkey.pokemonchess.util
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import io.github.breadkey.pokemonchess.GlobalApplication
 import io.github.breadkey.pokemonchess.gameengine2d.Sprite
@@ -12,10 +13,10 @@ object SpriteEditor {
     var context = GlobalApplication.instance.context()
 
 
-    fun getSprites(resid: Int, width: Int, height: Int, pixelSize: Int = 1, pivot: Sprite.Pivot? = null): List<Sprite> {
+    fun getSprites(assetName: String, width: Int, height: Int, pixelSize: Int = 1, pivot: Sprite.Pivot? = null): List<Sprite> {
         val sprites = arrayListOf<Sprite>()
-        val bitmapDrawable: BitmapDrawable = context.getDrawable(resid) as BitmapDrawable
-        val bitmap = bitmapDrawable.bitmap
+        val assetManager = context.assets
+        val bitmap = BitmapFactory.decodeStream(assetManager.open(assetName))
 
         for (y in 0..bitmap.height - height step height) {
             for (x in 0..bitmap.width - width step width) {
