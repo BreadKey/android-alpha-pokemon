@@ -3,16 +3,9 @@ package io.github.breadkey.pokemonchess.gameengine2d
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.MotionEvent
 import android.view.View
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 abstract class GameScene(val sceneName: String, context: Context): View(context) {
     init {
@@ -21,6 +14,8 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
 
     private val parentGameObjects = arrayListOf<GameObject>()
     var camera = Transform()
+
+    val updateContext = newSingleThreadContext("UpdateContext")
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
@@ -62,13 +57,14 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
 
     var isPlaying = false
 
-    fun play() {
+    fun play() = runBlocking {
         isPlaying = true
         Time.delta = 0L
-
-        GlobalScope.launch(Dispatchers.Default) {
+        GlobalScope.launch {
             while (isPlaying) {
-                update()
+                withContext(updateContext) {
+                    update()
+                }
 
                 GlobalScope.launch(Dispatchers.Main) {
                     invalidate()
@@ -82,7 +78,7 @@ abstract class GameScene(val sceneName: String, context: Context): View(context)
         isPlaying = false
     }
 
-    private fun update() = runBlocking {
+    private suspend fun update() {
         val startTime = System.currentTimeMillis()
         parentGameObjects.forEach { gameObject ->
             updateScript(gameObject)

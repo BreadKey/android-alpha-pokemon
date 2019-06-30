@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import io.github.breadkey.pokemonchess.viewmodel.PokemonChessViewModel
 import io.github.breadkey.pokemonchess.databinding.PokemonForSaleBinding
 import io.github.breadkey.pokemonchess.model.data.pokemon.PokemonSpec
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class PokemonForSaleAdapter(private val viewModel: PokemonChessViewModel): RecyclerView.Adapter<PokemonForSaleAdapter.PokemonViewHolder>() {
     var pokemonSpecs = emptyList<PokemonSpec>()
@@ -36,9 +33,7 @@ class PokemonForSaleAdapter(private val viewModel: PokemonChessViewModel): Recyc
             pokemonSpec = pokemonSpecs[position]
             listener = object : PokemonForSaleListener {
                 override fun onClick(pokemonSpec: PokemonSpec) {
-                    GlobalScope.launch {
-                        viewModel.tryBuy(pokemonSpec)
-                    }
+                    viewModel.tryBuy(pokemonSpec)
                 }
             }
             executePendingBindings()
